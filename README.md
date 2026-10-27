@@ -6,7 +6,8 @@ Tab completion for Alembic in Zsh and Oh My Zsh. Works with any environment mana
 
 - Completes Alembic commands and options.
 - Suggests project revision IDs, branch labels, and targets such as `head`, `base`, and `-1`.
-- Reads migration metadata from `alembic.ini` or `pyproject.toml` without running Alembic, project code, or database queries.
+- Reads migration metadata from `alembic.ini` and `pyproject.toml` without running Alembic, project code, or database queries. INI settings take precedence; TOML supplies missing settings, including in projects created with Alembic's `pyproject` template.
+- Keeps branch targets such as `payments@head` available as a branch grows.
 - Leaves your `alembic` command unchanged by default.
 
 ## Requirements
@@ -14,6 +15,8 @@ Tab completion for Alembic in Zsh and Oh My Zsh. Works with any environment mana
 - Zsh with completion enabled.
 - Python 3.11+ available as `python3` for project revision completion.
 - Alembic installed in your preferred environment to run migrations.
+
+Alembic is not required to load the plugin or generate completions. Without Python 3.11+, command, option, and built-in target completion still work; project revisions are unavailable. The plugin does not install Alembic or activate an environment for you.
 
 ## Installation
 
@@ -56,6 +59,8 @@ alembic revision --<TAB>       # --autogenerate, --message, and more
 ```
 
 Revision discovery uses static metadata; dynamic revisions and custom layouts may not be detected. It does not check the database's current revision. Runner-prefixed commands such as `poetry run alembic` are not supported; use `alembic` directly or the optional uv adapter below.
+
+Configuration discovery supports one explicit `-c` / `--config` file, combined with the other default configuration file. Repeated `-c` flags to select both files explicitly are not supported.
 
 ## Optional uv integration
 
